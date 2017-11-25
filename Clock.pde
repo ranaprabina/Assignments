@@ -44,5 +44,4 @@ void draw() {
       hour = 1;
     }
   }
-  endShape();
 }
