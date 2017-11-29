@@ -1,47 +1,56 @@
-int cx, cy;
-float Second_Hand;
-float Minute_Hand;
-float   Hour_Hand;
-float Diameter;
-int width = 640;
-int height = 360;
+int centerX = 300;
+int centerY =300;
+int secHand = 250;
+int minHand = 200;
+int hourHand = 150;
+float x;
+float y;
+float angle;
+
 void setup() {
-  size(640, 360);
-  stroke(255);
-  int radius = min(width, height) / 2;
-  Second_Hand = radius * 0.72;
-  Minute_Hand = radius * 0.60;
-  Hour_Hand = radius * 0.50;
-  Diameter = radius * 1.8;
-  cx = width / 2;
-  cy = height / 2;
+  
+  
+  size(600, 600);
 }
-void draw() {
-  background(0);
-  fill(80);
-  noStroke();
-  ellipse(cx, cy, Diameter, Diameter);
-  float s = map(second(), 0, 60, 0, TWO_PI) - HALF_PI;
-  float m = map(minute() + norm(second(), 0, 60), 0, 60, 0, TWO_PI) - HALF_PI; 
-  float h = map(hour() + norm(minute(), 0, 60), 0, 24, 0, TWO_PI * 2) - HALF_PI;
+
+void draw () {
+  
   stroke(255);
-  strokeWeight(1);
-  line(cx, cy, cx + cos(s) * Second_Hand, cy + sin(s) * Second_Hand);
-  strokeWeight(2);
-  line(cx, cy, cx + cos(m) * Minute_Hand, cy + sin(m) * Minute_Hand);
-  strokeWeight(4);
-  line(cx, cy, cx + cos(h) *   Hour_Hand, cy + sin(h) *   Hour_Hand);
-   int hour = 3;
-  for (int a = 0; a < 360; a+=30) {
-    float angle = radians(a);
-    float x = cx + cos(angle) * Second_Hand;
-    float y = cy + sin(angle) * Second_Hand;
-    vertex(x, y);
-    fill(255);
-    text(hour, x, y);
-    hour++;
-    if(hour > 12){
-      hour = 1;
+  background(0);
+  float quarterCircle = PI/2;
+  
+  // for the ellipse  
+  for (int i=1; i<=60; i++) {
+    angle = i * PI / 30.0;
+    float x = (centerX + cos(angle)* secHand);
+    float y =(centerY + sin(angle)* secHand);
+    if(i % 5 != 0) {
+      point(x,y);
+    }
+    else {
+      ellipse(x, y, 5, 5);
     }
   }
+  
+  // for second hand
+  angle = ((2 * PI/60) * second()) - quarterCircle;
+  x = centerX + secHand * cos(angle);
+  y = centerY + secHand * sin(angle);
+  stroke(255); 
+  line(centerX, centerY , x, y);
+  
+  // for minute hand  
+  angle = ((2 * PI/60) * minute()) - quarterCircle;
+  x = centerX + minHand * cos(angle);
+  y = centerY + minHand * sin(angle);
+  stroke(255);
+  line(centerX, centerY , x, y);
+  
+  // for hour hand  
+ angle = ((2 * PI/12) * hour()) + ((2 * PI/720) * minute()) - quarterCircle ;
+  x = centerX + hourHand * cos(angle);
+  y = centerY + hourHand * sin(angle);
+  stroke(255);
+  line(centerX, centerY, x, y);
+    
 }
